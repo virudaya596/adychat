@@ -16,7 +16,8 @@ body {
     align-items: center;
     height: 100vh;
     width: 95%;
-    overflow: hidden;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 header {

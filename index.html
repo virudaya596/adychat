@@ -15,5 +15,16 @@
 </button>
     </div>
     <script type="module" src="script.js"></script>
+    <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/firebase-messaging-sw.js")
+      .then((reg) => {
+        console.log("✅ Service Worker Registered", reg);
+      })
+      .catch((err) => {
+        console.error("❌ SW registration failed:", err);
+      });
+  }
+    </script>
 </body>
 </html>

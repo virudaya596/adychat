@@ -1,28 +1,36 @@
 // ✅ Import Firebase Modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { 
-    getAuth, 
-    signInWithPopup, 
-    GoogleAuthProvider, 
-    signOut, 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { 
-    getDatabase, 
-    ref, 
-    push, 
-    onChildAdded 
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
-// ✅ Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDxyqXcx-Uc9O-Pyp0OEQTDtkB9aXBgPls",
   authDomain: "adychat-18084.firebaseapp.com",
   projectId: "adychat-18084",
-  storageBucket: "adychat-18084.firebasestorage.app",
   messagingSenderId: "620921358718",
   appId: "1:620921358718:web:52aa1a4d489a7510218b2f"
 };
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    getToken(messaging, {
+      vapidKey: "BBPqGTDdaSucSdZx4pcTe_bL-pRsDcDrC26pHrK-jHjh7RXLmkGcCVYcrceDNqtjpSGZc7I55ZjAcF_IOwVMTts"
+    }).then((token) => {
+      console.log("🔐 FCM Token:", token);
+      // You can save this token to your Firestore users collection
+    });
+  } else {
+    console.warn("❌ Notification permission denied");
+  }
+}).catch((err) => {
+  console.error("😢 Error while getting permission:", err);
+});
+
+onMessage(messaging, (payload) => {
+  alert(`📨 New Message: ${payload.notification.title}\n${payload.notification.body}`);
+});
 
 // ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
